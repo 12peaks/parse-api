@@ -1,4 +1,5 @@
 class Api::UsersController < ApplicationController
+  include ApiAuthentication
   skip_forgery_protection
   before_action :authenticate_user!
   

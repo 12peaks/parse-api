@@ -6,6 +6,9 @@ class User < ApplicationRecord
          :confirmable, :lockable, :trackable, :omniauthable,
          omniauth_providers: %i[github]
 
+  has_many :api_keys, dependent: :destroy
+  after_create :generate_first_api_key
+
   def self.from_omniauth(auth, referrer = nil)
     find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
       user.email = auth.info.email
@@ -20,5 +23,15 @@ class User < ApplicationRecord
 
       user.skip_confirmation!
     end
+  end
+
+  def key
+    self.api_keys.first.key
+  end
+
+  private
+
+  def generate_first_api_key
+    self.api_keys.create
   end
 end
