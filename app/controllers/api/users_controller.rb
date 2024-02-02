@@ -1,6 +1,6 @@
 class Api::UsersController < ApplicationController
+  skip_forgery_protection
   before_action :authenticate_user!
-  skip_before_action :verify_authenticity_token
   
 
   def client_user
