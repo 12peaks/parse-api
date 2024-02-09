@@ -12,6 +12,17 @@ class Api::UsersController < ApplicationController
     end
   end
 
+  def switch_team
+    team_id = params[:team_id]
+    
+    if current_user.teams.exists?(team_id: team_id)
+      current_user.update(current_team_id: team_id)
+      render json: { success: true, message: "Switched team" }
+    else
+      render json: { error: "Team not found" }, status: :not_found
+    end
+  end
+
   def log_out
     sign_out(current_user)
     render json: { success: true, message: "Logged out" }

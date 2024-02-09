@@ -8,7 +8,8 @@ class User < ApplicationRecord
 
   has_many :api_keys, dependent: :destroy
   has_and_belongs_to_many :teams
-  
+  belongs_to :current_team, class_name: "Team", optional: true
+
   after_create :generate_first_api_key
   after_create :assign_default_team, unless: :invited_to_team?
 
