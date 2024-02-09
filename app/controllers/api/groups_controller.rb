@@ -23,7 +23,12 @@ class Api::GroupsController < ApplicationController
     user = current_user || api_user
     group = user.current_team.groups.new(group_params)
     if group.save
-      render json: group, methods: [:avatar_url, :cover_image_url]
+      group_user = GroupUser.create(group: group, user: user)
+      if group_user.persisted?
+        render json: group, methods: [:avatar_url, :cover_image_url]
+      else
+        render json: { error: group_user.errors.full_messages }, status: :unprocessable_entity
+      end
     else
       render json: { error: group.errors.full_messages }, status: :bad_request
     end

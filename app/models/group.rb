@@ -2,6 +2,10 @@ class Group < ApplicationRecord
   belongs_to :team
   has_one_attached :avatar
   has_one_attached :cover_image
+  has_many :group_users, dependent: :delete_all
+  has_many :users, through: :group_users
+
+
   before_create :generate_url_slug
 
   def avatar_url
