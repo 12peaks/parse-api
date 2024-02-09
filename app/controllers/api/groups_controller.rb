@@ -1,7 +1,7 @@
 class Api::GroupsController < ApplicationController
   include ApiAuthentication
   skip_forgery_protection
-  #before_action :authenticate_user!
+  before_action :authenticate_user!, unless: -> { api_user.present? }
 
   def index
     user = current_user || api_user
