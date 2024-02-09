@@ -1,7 +1,7 @@
 class Api::GroupUsersController < ApplicationController
   include ApiAuthentication
+  before_action :authenticate_user!, unless: :api_request?
   skip_forgery_protection
-  before_action :authenticate_user!, unless: -> { api_user.present? }
 
   def create
     group_user = GroupUser.new(group_user_params)

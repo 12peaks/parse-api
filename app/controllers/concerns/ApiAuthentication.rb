@@ -10,17 +10,17 @@ module ApiAuthentication
 
   private
 
+  def api_request?
+    request.headers["Authorization"].present?
+  end
+
   def authenticate
-    authenticate_token || unauthenticated
+    authenticate_token || unauthenticated if api_request?
   end
 
   def authenticate_token
-    if current_user
-      @api_key = current_user.key
-    else
-      authenticate_with_http_token do |token|
-        @api_key = ApiKey.find_by(key: token)
-      end
+    authenticate_with_http_token do |token|
+      @api_key = ApiKey.find_by(key: token)
     end
   end
 

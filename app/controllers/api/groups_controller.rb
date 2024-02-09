@@ -1,12 +1,16 @@
 class Api::GroupsController < ApplicationController
   include ApiAuthentication
+  before_action :authenticate_user!, unless: :api_request?
   skip_forgery_protection
-  before_action :authenticate_user!, unless: -> { api_user.present? }
 
   def index
     user = current_user || api_user
-    groups = user.current_team.groups
-    render json: groups.as_json(methods: [:avatar_url, :cover_image_url])
+    if params[:joined] == 'true'
+      groups = user.groups.where(team: user.current_team)
+    else
+      groups = user.current_team.groups
+    end
+    render json: groups.as_json(methods: [:avatar_url, :cover_image_url], include: {group_users: {only: [:id, :created_at, :updated_at]}})
   end
 
   def show

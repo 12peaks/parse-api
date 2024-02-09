@@ -1,7 +1,7 @@
 class Api::UsersController < ApplicationController
   include ApiAuthentication
+  before_action :authenticate_user!, unless: :api_request?
   skip_forgery_protection
-  before_action :authenticate_user!
   
 
   def client_user
