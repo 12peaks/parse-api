@@ -7,7 +7,10 @@ class User < ApplicationRecord
          omniauth_providers: %i[github]
 
   has_many :api_keys, dependent: :destroy
+  has_and_belongs_to_many :teams
+  
   after_create :generate_first_api_key
+  after_create :assign_default_team, unless: :invited_to_team?
 
   def self.from_omniauth(auth, referrer = nil)
     find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
@@ -33,5 +36,14 @@ class User < ApplicationRecord
 
   def generate_first_api_key
     self.api_keys.create
+  end
+
+  def assign_default_team
+    default_team = Team.find_or_create_by(name: "#{user.email}'s Team")
+    self.teams << default_team
+  end
+
+  def invited_to_team?
+    false
   end
 end
