@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_09_021933) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_09_162721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -74,6 +74,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_09_021933) do
     t.index ["team_id"], name: "index_groups_on_team_id"
   end
 
+  create_table "posts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "content"
+    t.text "text_content"
+    t.boolean "is_pinned", default: false
+    t.uuid "group_id"
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_posts_on_group_id"
+    t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
   create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -124,4 +136,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_09_021933) do
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "groups", "teams"
+  add_foreign_key "posts", "groups"
+  add_foreign_key "posts", "users"
 end

@@ -5,8 +5,9 @@ class Api::UsersController < ApplicationController
   
 
   def client_user
-    if current_user
-      render json: current_user
+    user = current_user || api_user
+    if user
+      render json: user.as_json(include: { current_team: { only: [:id, :name] } })
     else
       render json: { error: "Not logged in" }, status: :unauthorized
     end

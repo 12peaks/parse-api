@@ -4,8 +4,10 @@ Rails.application.routes.draw do
   namespace :api do
     get "users/current_user" => "users#client_user"
     delete "users/sign_out" => "users#log_out"
+    get "teams/users" => "teams#team_users"
     resources :groups
     resources :group_users
+    resources :posts
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

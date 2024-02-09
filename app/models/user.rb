@@ -7,6 +7,7 @@ class User < ApplicationRecord
          omniauth_providers: %i[github]
 
   has_many :api_keys, dependent: :destroy
+  has_many :posts
   has_many :group_users
   has_many :groups, through: :group_users
   has_and_belongs_to_many :teams
