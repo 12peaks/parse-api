@@ -38,6 +38,20 @@ class Api::GroupsController < ApplicationController
     end
   end
 
+  def update
+    user = current_user || api_user
+    group = user.current_team.groups.find_by(id: params[:id])
+    if group
+      if group.update(group_params)
+        render json: group, methods: [:avatar_url, :cover_image_url]
+      else
+        render json: { error: group.errors.full_messages }, status: :bad_request
+      end
+    else
+      render json: { error: "Group not found in your current team" }, status: :not_found
+    end
+  end
+
   def destroy
     group = Group.find(params[:id])
     group.destroy
