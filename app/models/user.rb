@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, 
          :confirmable, :lockable, :trackable, :omniauthable,
-         omniauth_providers: %i[github]
+         omniauth_providers: %i[github google_oauth2]
 
   has_many :api_keys, dependent: :destroy
   has_many :posts
@@ -20,10 +20,15 @@ class User < ApplicationRecord
     find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
-      user.name = auth.info.names
+
+      if auth.provider == "google_oauth2"
+        user.name = auth.info.name
+        user.avatar_url = auth.info.image
+      end
 
       if auth.provider == "github"
-        user.github_image = auth.info.image
+        user.name = auth.info.names
+        user.avatar_url = auth.info.image
         user.github_username = auth.info.nickname
         user.x_username = auth.extra&.raw_info&.twitter_username
       end
@@ -43,8 +48,9 @@ class User < ApplicationRecord
   end
 
   def assign_default_team
-    default_team = Team.find_or_create_by(name: "#{user.email}'s Team")
+    default_team = Team.find_or_create_by(name: "#{self.email}'s Team")
     self.teams << default_team
+    self.current_team = default_team
   end
 
   def invited_to_team?

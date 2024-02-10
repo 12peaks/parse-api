@@ -13,3 +13,9 @@
  *= require_tree .
  *= require_self
  */
+
+.parse-logo {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 4rem;
+}

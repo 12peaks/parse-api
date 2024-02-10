@@ -1,6 +1,10 @@
-<div class="">
-  <div class="grid grid-cols-1 gap-3">
-    <div class="flex gap-x-3 text-center">
+<div class="w-screen h-screen">
+  <div class="flex flex-col mt-96 space-y-4 h-full items-center">
+    <h1 class="parse-logo text-blue-500 text-center">parse</h1>
+    <div class="flex text-center">
+      <%= button_to "#{image_tag('google-logo.svg', class:'w-5 h-5 align-middle inline-block mr-2')} Continue with Google".html_safe, user_google_oauth2_omniauth_authorize_path, class: "font-medium inline-flex justify-center w-full items-center px-3 py-3 bg-white rounded-lg shadow-sm text-gray-900 ring-1 ring-inset ring-gray-200 hover:bg-gray-50 focus:outline-offset-0", method: :post, "data-turbo": false, form_class: "inline" %>
+    </div>
+    <div class="flex text-center">
       <%= button_to "#{image_tag('github-logo.svg', class:'w-5 h-5 align-middle inline-block mr-2')} Continue with GitHub".html_safe, user_github_omniauth_authorize_path, class: "font-medium inline-flex justify-center w-full items-center px-3 py-3 bg-white rounded-lg shadow-sm text-gray-900 ring-1 ring-inset ring-gray-200 hover:bg-gray-50 focus:outline-offset-0", method: :post, "data-turbo": false, form_class: "inline" %>
     </div>
   </div>
