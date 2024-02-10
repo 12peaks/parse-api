@@ -8,7 +8,8 @@ class Api::PostsController < ApplicationController
     posts = user.current_team.posts.order(created_at: :desc)
     render json: posts.as_json(include: {
       user: { only: [:id, :name, :github_image, :avatar_url] },
-      group: { only: [:id, :name, :url_slug] }
+      group: { only: [:id, :name, :url_slug] },
+      comments: { include: { user: { only: [:id, :name, :avatar_url] } } }
     })
   end
   
