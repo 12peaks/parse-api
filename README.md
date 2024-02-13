@@ -13,6 +13,7 @@ I'm currently in the process of rewriting the backend using Rails, the original 
 - [x] Group resources and basic CRUD
 - [ ] Reaction resources and basic CRUD
 - [ ] Notifications resources and basic CRUD
+- [ ] Catch up on model and controller tests
 - [ ] Group feed controller updates
 - [ ] Mailer setup
 - [ ] Invite system for teams
