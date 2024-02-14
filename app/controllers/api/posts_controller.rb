@@ -5,7 +5,12 @@ class Api::PostsController < ApplicationController
 
   def index
     user = current_user || api_user
-    posts = user.current_team.posts.order(created_at: :desc)
+    if params[:group_id]
+      posts = user.current_team.posts.where(group_id: params[:group_id]).order(created_at: :desc)
+    else
+      posts = user.current_team.posts.order(created_at: :desc)
+    end
+
     render json: posts.as_json(include: {
       user: { only: [:id, :name, :github_image, :avatar_url] },
       group: { only: [:id, :name, :url_slug] },
