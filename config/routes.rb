@@ -7,8 +7,11 @@ Rails.application.routes.draw do
     get "teams/users" => "teams#team_users"
     post "posts/:post_id/comments" => "comments#create"
     post "posts/:post_id/reactions" => "reactions#create"
+    delete "group_users", to: "group_users#destroy"
+    post "groups/:group_id/join", to: "group_users#join"
+    post "groups/:group_id/leave", to: "group_users#leave"
     resources :groups
-    resources :group_users
+    resources :group_users, except: [:destroy]
     resources :posts
     resources :comments
     resources :reactions

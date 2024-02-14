@@ -13,7 +13,7 @@ class Api::GroupsController < ApplicationController
       groups = user.current_team.groups
     end
     render json: groups.as_json(methods: [:avatar_url, :cover_image_url], 
-      include: {group_users: {only: [:id, :created_at, :updated_at, :name, :email, :avatar_url]}})
+      include: {users: {only: [:id, :created_at, :updated_at, :name, :email, :avatar_url]}})
   end
 
   def show
@@ -21,7 +21,7 @@ class Api::GroupsController < ApplicationController
     group = user.current_team.groups.find_by(id: params[:id])
     if group
       render json: group.as_json(methods: [:avatar_url, :cover_image_url],
-        include: {group_users: {only: [:id, :created_at, :updated_at, :name, :email, :avatar_url]}})
+        include: {users: {only: [:id, :created_at, :updated_at, :name, :email, :avatar_url]}})
     else
       render json: { error: "Group not found in your current team" }, status: :not_found
     end
