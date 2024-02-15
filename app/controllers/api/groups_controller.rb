@@ -5,13 +5,11 @@ class Api::GroupsController < ApplicationController
 
   def index
     user = current_user || api_user
-    if params[:joined] == 'true'
-      groups = user.groups.where(team: user.current_team)
-    elsif params[:slug].present?
-      groups = user.current_team.groups.where(url_slug: params[:slug]).first
-    else
-      groups = user.current_team.groups
-    end
+    groups = user.current_team.groups
+    groups = groups.where(team: user.current_team) if params[:joined] == 'true'
+    groups = groups.where(url_slug: params[:slug]) if params[:slug].present?
+    groups = groups.where("name ILIKE ? OR description ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
+    
     render json: groups.as_json(methods: [:avatar_url, :cover_image_url], 
       include: {users: {only: [:id, :created_at, :updated_at, :name, :email, :avatar_url]}})
   end
