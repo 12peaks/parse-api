@@ -22,6 +22,11 @@ class User < ApplicationRecord
     user = User.find_by(email: auth.info.email)
     if user.present?
       user.update(provider: auth.provider, uid: auth.uid)
+      if auth.provider == "google_oauth2"
+        user.update(name: auth.info.name, avatar_url: auth.info.image)
+      elsif auth.provider == "github"
+        user.update(name: auth.info.names, avatar_url: auth.info.image, github_username: auth.info.nickname, x_username: auth.extra&.raw_info&.twitter_username)
+      end
       user
     else
       find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|

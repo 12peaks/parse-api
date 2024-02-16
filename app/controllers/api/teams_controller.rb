@@ -6,7 +6,7 @@ class Api::TeamsController < ApplicationController
   def team_users
     user = current_user || api_user
     team = user.current_team
-    render json: team.users.as_json(only: [:id, :name, :email, :avatar_url])
+    render json: team.users.as_json(only: [:id, :name, :email, :avatar_url, :created_at, :updated_at, :invitation_created_at, :last_sign_in_at])
   end
 
   private
