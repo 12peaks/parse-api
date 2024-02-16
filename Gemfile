@@ -53,6 +53,7 @@ gem "aws-sdk-s3", require: false
 gem 'pagy'
 
 gem "devise", "~> 4.9"
+gem "devise_invitable", "~> 2.0"
 gem 'omniauth'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-github'
@@ -80,5 +81,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-

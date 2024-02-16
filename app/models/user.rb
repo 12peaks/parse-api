@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :invitable,
          :recoverable, :rememberable, :validatable, 
          :confirmable, :lockable, :trackable, :omniauthable,
          omniauth_providers: %i[github google_oauth2]
@@ -16,26 +16,32 @@ class User < ApplicationRecord
   belongs_to :current_team, class_name: "Team", optional: true
 
   after_create :generate_first_api_key
-  after_create :assign_default_team, unless: :invited_to_team?
+  after_create :assign_default_team, unless: Proc.new { invited_to_team? || invitation_token.present? }
 
   def self.from_omniauth(auth, referrer = nil)
-    find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0, 20]
+    user = User.find_by(email: auth.info.email)
+    if user.present?
+      user.update(provider: auth.provider, uid: auth.uid)
+      user
+    else
+      find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
+        user.email = auth.info.email
+        user.password = Devise.friendly_token[0, 20]
 
-      if auth.provider == "google_oauth2"
-        user.name = auth.info.name
-        user.avatar_url = auth.info.image
+        if auth.provider == "google_oauth2"
+          user.name = auth.info.name
+          user.avatar_url = auth.info.image
+        end
+
+        if auth.provider == "github"
+          user.name = auth.info.names
+          user.avatar_url = auth.info.image
+          user.github_username = auth.info.nickname
+          user.x_username = auth.extra&.raw_info&.twitter_username
+        end
+
+        user.skip_confirmation!
       end
-
-      if auth.provider == "github"
-        user.name = auth.info.names
-        user.avatar_url = auth.info.image
-        user.github_username = auth.info.nickname
-        user.x_username = auth.extra&.raw_info&.twitter_username
-      end
-
-      user.skip_confirmation!
     end
   end
 
@@ -56,6 +62,6 @@ class User < ApplicationRecord
   end
 
   def invited_to_team?
-    false
+    self.current_team.present?
   end
 end
