@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     get "users/current_user" => "users#client_user"
     delete "users/sign_out" => "users#log_out"
     get "teams/users" => "teams#team_users"
+    get "teams/users/:user_id" => "teams#team_user"
     post "posts/:post_id/comments" => "comments#create"
     post "posts/:post_id/reactions" => "reactions#create"
     delete "group_users", to: "group_users#destroy"

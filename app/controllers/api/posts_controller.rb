@@ -7,6 +7,8 @@ class Api::PostsController < ApplicationController
     user = current_user || api_user
     if params[:group_id]
       posts = user.current_team.posts.where(group_id: params[:group_id]).order(created_at: :desc)
+    elsif params[:user_id]
+      posts = user.current_team.posts.where(user_id: params[:user_id]).order(created_at: :desc)
     else
       posts = user.current_team.posts.order(created_at: :desc)
     end
