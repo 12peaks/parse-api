@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :posts
   has_many :comments
   has_many :reactions
+  has_many :notifications
   has_many :group_users
   has_many :groups, through: :group_users
   has_and_belongs_to_many :teams

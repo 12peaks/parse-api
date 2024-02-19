@@ -3,6 +3,7 @@ class Group < ApplicationRecord
   has_one_attached :avatar
   has_one_attached :cover_image
   has_many :posts
+  has_many :notifications
   has_many :group_users, dependent: :delete_all
   has_many :users, through: :group_users
 

@@ -13,11 +13,14 @@ Rails.application.routes.draw do
     delete "group_users", to: "group_users#destroy"
     post "groups/:group_id/join", to: "group_users#join"
     post "groups/:group_id/leave", to: "group_users#leave"
+    post "notifications/mark_all_as_read", to: "notifications#mark_all_as_read"
+    get "notifications/unread_count", to: "notifications#unread_count"
     resources :groups
     resources :group_users, except: [:destroy]
     resources :posts
     resources :comments
     resources :reactions
+    resources :notifications
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
