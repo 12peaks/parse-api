@@ -3,6 +3,16 @@ class Users::InvitationsController < Devise::InvitationsController
   before_action :set_current_user
   skip_forgery_protection
 
+  def create
+    super do |resource|
+      if resource.errors.empty?
+        render json: { success: true, message: "Invitation sent" }, status: :ok and return
+      else
+        render json: { error: resource.errors.full_messages }, status: :bad_request and return
+      end
+    end
+  end
+
   private
 
   def invite_resource
