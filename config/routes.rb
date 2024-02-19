@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     post "groups/:group_id/leave", to: "group_users#leave"
     post "notifications/mark_all_as_read", to: "notifications#mark_all_as_read"
     get "notifications/unread_count", to: "notifications#unread_count"
+    post "notifications/remove_all", to: "notifications#destroy_all"
     resources :groups
     resources :group_users, except: [:destroy]
     resources :posts
