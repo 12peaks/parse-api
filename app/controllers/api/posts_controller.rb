@@ -31,6 +31,19 @@ class Api::PostsController < ApplicationController
     end
   end
 
+  def update
+    user = current_user || api_user
+    post = user.posts.find_by(id: params[:id])
+    
+    return render json: { error: "Post not found or not authorized" }, status: :not_found unless post && post.user_id == user.id
+    
+    if post.update(post_params)
+      render json: post
+    else
+      render json: { error: post.errors.full_messages }, status: :bad_request
+    end
+  end
+
   private
 
   def post_params
