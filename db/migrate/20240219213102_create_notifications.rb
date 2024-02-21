@@ -1,6 +1,6 @@
 class CreateNotifications < ActiveRecord::Migration[7.1]
   def change
-    create_table :notifications do |t|
+    create_table :notifications, id: :uuid do |t|
       t.string :status
       t.text :text
       t.text :image_url

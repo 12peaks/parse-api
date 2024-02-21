@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_19_213102) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_21_185934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -84,7 +84,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_213102) do
     t.index ["team_id"], name: "index_groups_on_team_id"
   end
 
-  create_table "notifications", force: :cascade do |t|
+  create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "status"
     t.text "text"
     t.text "image_url"
@@ -135,6 +135,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_213102) do
     t.uuid "user_id", null: false
     t.index ["team_id"], name: "index_teams_users_on_team_id"
     t.index ["user_id"], name: "index_teams_users_on_user_id"
+  end
+
+  create_table "triage_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "description"
+    t.string "severity"
+    t.string "status"
+    t.uuid "user_id", null: false
+    t.uuid "owner_id"
+    t.uuid "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.serial "event_number"
+    t.index ["user_id"], name: "index_triage_events_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -192,4 +205,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_213102) do
   add_foreign_key "posts", "users"
   add_foreign_key "reactions", "posts"
   add_foreign_key "reactions", "users"
+  add_foreign_key "triage_events", "users"
 end
