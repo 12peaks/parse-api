@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_21_185934) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_22_224803) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -137,6 +137,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_185934) do
     t.index ["user_id"], name: "index_teams_users_on_user_id"
   end
 
+  create_table "triage_event_comments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "text"
+    t.uuid "triage_event_id", null: false
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["triage_event_id"], name: "index_triage_event_comments_on_triage_event_id"
+    t.index ["user_id"], name: "index_triage_event_comments_on_user_id"
+  end
+
   create_table "triage_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "description"
     t.string "severity"
@@ -205,5 +215,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_185934) do
   add_foreign_key "posts", "users"
   add_foreign_key "reactions", "posts"
   add_foreign_key "reactions", "users"
+  add_foreign_key "triage_event_comments", "triage_events"
+  add_foreign_key "triage_event_comments", "users"
   add_foreign_key "triage_events", "users"
 end

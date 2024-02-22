@@ -16,7 +16,10 @@ class Api::TriageEventsController < ApplicationController
     triage_event.team = user.current_team
     
     if triage_event.save
-      render json: triage_event.as_json(include: [:user, :owner], methods: :attachments_data)
+      render json: triage_event.as_json(include: 
+        [:user, :owner, 
+          {triage_event_comments: {include: {user: {only: [:id, :name, :avatar_url]}}}}],
+           methods: :attachments_data)
     else
       render json: { error: triage_event.errors.full_messages }, status: :bad_request
     end
@@ -26,7 +29,10 @@ class Api::TriageEventsController < ApplicationController
     user = current_user || api_user
     triage_event = user.current_team.triage_events.find_by(id: params[:id])
     if triage_event
-      render json: triage_event.as_json(include: [:user, :owner], methods: :attachments_data)
+      render json: triage_event.as_json(include: 
+        [:user, :owner, 
+          {triage_event_comments: {include: {user: {only: [:id, :name, :avatar_url]}}}}],
+           methods: :attachments_data)
     else
       render json: { error: "Triage event not found in your current team" }, status: :not_found
     end
@@ -37,7 +43,10 @@ class Api::TriageEventsController < ApplicationController
     triage_event = user.current_team.triage_events.find_by(id: params[:id])
     if triage_event
       if triage_event.update(triage_event_params)
-        render json: triage_event.as_json(include: [:user, :owner], methods: :attachments_data)
+        render json: triage_event.as_json(include: 
+          [:user, :owner, 
+            {triage_event_comments: {include: {user: {only: [:id, :name, :avatar_url]}}}}],
+             methods: :attachments_data)
       else
         render json: { error: triage_event.errors.full_messages }, status: :bad_request
       end
