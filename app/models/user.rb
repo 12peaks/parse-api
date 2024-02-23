@@ -28,7 +28,7 @@ class User < ApplicationRecord
       if auth.provider == "google_oauth2"
         user.update(name: auth.info.name, avatar_url: auth.info.image)
       elsif auth.provider == "github"
-        user.update(name: auth.info.names, avatar_url: auth.info.image, github_username: auth.info.nickname, x_username: auth.extra&.raw_info&.twitter_username)
+        user.update(name: auth.info.name, avatar_url: auth.info.image, github_username: auth.info.nickname, x_username: auth.extra&.raw_info&.twitter_username)
       end
       user
     else
