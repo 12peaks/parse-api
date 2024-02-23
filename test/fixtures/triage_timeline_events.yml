@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  old_value: MyText
+  new_value: MyText
+  triage_event: one
+  user: one
+  field: MyText
+
+two:
+  old_value: MyText
+  new_value: MyText
+  triage_event: two
+  user: two
+  field: MyText

@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :notifications
   has_many :triage_events
   has_many :triage_event_comments
+  has_many :triage_timeline_events
   has_many :group_users
   has_many :groups, through: :group_users
   has_and_belongs_to_many :teams
