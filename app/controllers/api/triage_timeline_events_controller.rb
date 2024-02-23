@@ -10,7 +10,7 @@ class Api::TriageTimelineEventsController < ApplicationController
       triage_timeline_events = TriageTimelineEvent.all.order(created_at: :asc)
     end
 
-    render json: triage_timeline_events, include: { user: { only: [:id, :name, :avatar_url] } }
+    render json: triage_timeline_events, include: { user: { only: [:id, :name], methods: [:avatar_image_url] } }
   end
   
   def create
@@ -19,7 +19,7 @@ class Api::TriageTimelineEventsController < ApplicationController
     triage_timeline_event.user = user
     
     if triage_timeline_event.save
-      render json: triage_timeline_event, include: { user: { only: [:id, :name, :avatar_url] } }
+      render json: triage_timeline_events, include: { user: { only: [:id, :name], methods: [:avatar_image_url] } }
     else
       render json: { error: triage_timeline_event.errors.full_messages }, status: :bad_request
     end
@@ -30,7 +30,7 @@ class Api::TriageTimelineEventsController < ApplicationController
     triage_timeline_event = TriageTimelineEvent.find_by(id: params[:id])
     if triage_timeline_event
       if triage_timeline_event.update(triage_timeline_event_params)
-        render json: triage_timeline_event, include: { user: { only: [:id, :name, :avatar_url] } }
+        render json: triage_timeline_events, include: { user: { only: [:id, :name], methods: [:avatar_image_url] } }
       else
         render json: { error: triage_timeline_event.errors.full_messages }, status: :bad_request
       end

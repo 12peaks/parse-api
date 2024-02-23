@@ -17,7 +17,7 @@ class Comment < ApplicationRecord
         text: "#{self.user.name} commented on your post",
         post_id: self.post.id,
         group_id: self.post.group_id,
-        image_url: self.user.avatar_url
+        image_url: self.user.avatar_image_url
       )
     end
   end

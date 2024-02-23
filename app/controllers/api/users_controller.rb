@@ -7,9 +7,18 @@ class Api::UsersController < ApplicationController
   def client_user
     user = current_user || api_user
     if user
-      render json: user.as_json(include: { current_team: { only: [:id, :name] } })
+      render json: user.as_json(methods: [:avatar_image_url], include: { current_team: { only: [:id, :name] } })
     else
       render json: { error: "Not logged in" }, status: :unauthorized
+    end
+  end
+
+  def update
+    user = current_user || api_user
+    if user.update(user_params)
+      render json: user
+    else
+      render json: { error: user.errors.full_messages }, status: :bad_request
     end
   end
 
@@ -34,5 +43,9 @@ class Api::UsersController < ApplicationController
     unless user_signed_in?
       render json: { error: "Not logged in" }, status: :unauthorized
     end
+  end
+
+  def user_params
+    params.require(:user).permit(:name, :email, :avatar)
   end
 end

@@ -18,6 +18,7 @@ class User < ApplicationRecord
   has_many :groups, through: :group_users
   has_and_belongs_to_many :teams
   belongs_to :current_team, class_name: "Team", optional: true
+  has_one_attached :avatar
 
   after_create :generate_first_api_key
   after_create :assign_default_team, unless: Proc.new { invited_to_team? || invitation_token.present? }
@@ -55,6 +56,14 @@ class User < ApplicationRecord
 
   def key
     self.api_keys.first.key
+  end
+
+  def avatar_image_url
+    if avatar.attached?
+      Rails.application.routes.url_helpers.url_for(avatar)
+    else
+      avatar_url
+    end
   end
 
   private

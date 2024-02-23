@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace :api do
     get "users/current_user" => "users#client_user"
     delete "users/sign_out" => "users#log_out"
+    put "users" => "users#update"
     get "teams/users" => "teams#team_users"
     get "teams/users/:user_id" => "teams#team_user"
     post "posts/:post_id/comments" => "comments#create"
