@@ -25,7 +25,7 @@ class User < ApplicationRecord
   def self.from_omniauth(auth, referrer = nil)
     user = User.find_by(email: auth.info.email)
     if user.present?
-      user.update(provider: auth.provider, uid: auth.uid)
+      user.update(provider: auth.provider, uid: auth.uid, email: auth.info.email)
       
       if auth.provider == "github"
         user.update(github_username: auth.info.nickname, x_username: auth.extra&.raw_info&.twitter_username)
