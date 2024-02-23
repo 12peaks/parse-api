@@ -69,6 +69,6 @@ class Api::TriageEventsController < ApplicationController
   private
 
   def triage_event_params
-    params.require(:triage_event).permit(:description, :severity, :status, :owner_id, :team_id, :user, attachments: [])
+    params.require(:triage_event).permit(:description, :severity, :status, :owner_id, :team_id, :user, :user_id, attachments: [])
   end
 end
