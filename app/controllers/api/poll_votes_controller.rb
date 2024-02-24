@@ -17,8 +17,8 @@ class Api::PollVotesController < ApplicationController
 
   def destroy
     user = current_user || api_user
-    poll_option = PollOption.find(params[:poll_option_id])
-    poll_vote = PollVote.find_by(poll_option: poll_option, user: user)
+    vote_id = params[:id]
+    poll_vote = PollVote.find_by(id: vote_id, user: user)
     if poll_vote
       poll_vote.destroy
       render json: { success: true, message: "Poll vote deleted" }
