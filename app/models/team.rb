@@ -3,4 +3,5 @@ class Team < ApplicationRecord
   has_many :groups, dependent: :destroy
   has_many :posts, through: :users
   has_many :triage_events
+  has_many :polls
 end

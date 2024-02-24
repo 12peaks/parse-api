@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     post "notifications/mark_all_as_read", to: "notifications#mark_all_as_read"
     get "notifications/unread_count", to: "notifications#unread_count"
     post "notifications/remove_all", to: "notifications#destroy_all"
+    get "feed" => "feed#index"
     resources :groups
     resources :group_users, except: [:destroy]
     resources :posts
@@ -26,6 +27,9 @@ Rails.application.routes.draw do
     resources :triage_events
     resources :triage_event_comments
     resources :triage_timeline_events
+    resources :poll_votes
+    resources :poll_options
+    resources :polls
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

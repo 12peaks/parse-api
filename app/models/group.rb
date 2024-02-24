@@ -6,6 +6,7 @@ class Group < ApplicationRecord
   has_many :notifications
   has_many :group_users, dependent: :delete_all
   has_many :users, through: :group_users
+  has_many :polls
 
 
   before_create :generate_url_slug

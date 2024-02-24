@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_23_183922) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_24_170231) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -99,6 +99,37 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_183922) do
     t.index ["group_id"], name: "index_notifications_on_group_id"
     t.index ["post_id"], name: "index_notifications_on_post_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "poll_options", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "text"
+    t.uuid "poll_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["poll_id"], name: "index_poll_options_on_poll_id"
+  end
+
+  create_table "poll_votes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "poll_option_id", null: false
+    t.uuid "poll_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["poll_id"], name: "index_poll_votes_on_poll_id"
+    t.index ["poll_option_id"], name: "index_poll_votes_on_poll_option_id"
+    t.index ["user_id"], name: "index_poll_votes_on_user_id"
+  end
+
+  create_table "polls", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "content"
+    t.uuid "user_id", null: false
+    t.uuid "group_id"
+    t.uuid "team_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_polls_on_group_id"
+    t.index ["team_id"], name: "index_polls_on_team_id"
+    t.index ["user_id"], name: "index_polls_on_user_id"
   end
 
   create_table "posts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -223,6 +254,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_183922) do
   add_foreign_key "notifications", "groups"
   add_foreign_key "notifications", "posts"
   add_foreign_key "notifications", "users"
+  add_foreign_key "poll_options", "polls"
+  add_foreign_key "poll_votes", "poll_options"
+  add_foreign_key "poll_votes", "polls"
+  add_foreign_key "poll_votes", "users"
+  add_foreign_key "polls", "groups"
+  add_foreign_key "polls", "teams"
+  add_foreign_key "polls", "users"
   add_foreign_key "posts", "groups"
   add_foreign_key "posts", "users"
   add_foreign_key "reactions", "posts"
