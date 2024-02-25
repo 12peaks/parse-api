@@ -17,6 +17,7 @@ class User < ApplicationRecord
   has_many :polls
   has_many :poll_options
   has_many :poll_votes
+  has_many :goals
   has_many :group_users
   has_many :groups, through: :group_users
   has_and_belongs_to_many :teams

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_24_170231) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_25_230110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -60,6 +60,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_24_170231) do
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "goals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "team_id", null: false
+    t.text "name"
+    t.text "description"
+    t.uuid "user_id", null: false
+    t.string "format"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.float "initial_value"
+    t.float "target_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_goals_on_team_id"
+    t.index ["user_id"], name: "index_goals_on_user_id"
   end
 
   create_table "group_users", force: :cascade do |t|
@@ -248,6 +264,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_24_170231) do
   add_foreign_key "api_keys", "users"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "goals", "teams"
+  add_foreign_key "goals", "users"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "groups", "teams"

@@ -4,4 +4,5 @@ class Team < ApplicationRecord
   has_many :posts, through: :users
   has_many :triage_events
   has_many :polls
+  has_many :goals
 end
