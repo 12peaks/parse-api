@@ -7,9 +7,12 @@ class Api::GoalUpdatesController < ApplicationController
     user = current_user || api_user
     goal = user.current_team.goals.find(params[:goal_id])
     goal_update = goal.goal_updates.new(goal_update_params)
+    goal_update.user = user
+    goal_update.team = user.current_team
     if goal_update.save
       render json: goal_update
     else
+      puts goal_update.errors.full_messages
       render json: { error: goal_update.errors.full_messages }, status: :bad_request
     end
   end
@@ -36,6 +39,6 @@ class Api::GoalUpdatesController < ApplicationController
   private
 
   def goal_update_params
-    params.require(:goal_update).permit(:note, :status, :value, :user, :goal)
+    params.require(:goal_update).permit(:note, :status, :value, :user, :team, :goal, :goal_id)
   end
 end

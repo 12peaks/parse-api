@@ -8,7 +8,7 @@ class Api::GoalsController < ApplicationController
     goals = user.current_team.goals
     render json: goals.as_json(include: [
       { user: { only: [:id, :name], methods: [:avatar_image_url] } },
-      { goal_updates: { only: [:id, :note, :value, :status, :created_at, :updated_at] } },
+      { goal_updates: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } }, order: 'created_at ASC' } },
       { goal_collaborators: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } } } }
     ])
   end
@@ -19,7 +19,7 @@ class Api::GoalsController < ApplicationController
     if goal
       render json: goal.as_json(include: [
         { user: { only: [:id, :name], methods: [:avatar_image_url] } },
-        { goal_updates: { only: [:id, :note, :value, :status, :created_at, :updated_at] } },
+        { goal_updates: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } }, order: 'created_at ASC' } },
         { goal_collaborators: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } } } }
       ])
     else
