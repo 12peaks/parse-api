@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_25_230110) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_26_023805) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -60,6 +60,31 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_230110) do
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "goal_collaborators", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "team_id", null: false
+    t.uuid "user_id", null: false
+    t.uuid "goal_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["goal_id"], name: "index_goal_collaborators_on_goal_id"
+    t.index ["team_id"], name: "index_goal_collaborators_on_team_id"
+    t.index ["user_id"], name: "index_goal_collaborators_on_user_id"
+  end
+
+  create_table "goal_updates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "goal_id", null: false
+    t.uuid "team_id", null: false
+    t.uuid "user_id", null: false
+    t.text "note"
+    t.float "value"
+    t.text "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["goal_id"], name: "index_goal_updates_on_goal_id"
+    t.index ["team_id"], name: "index_goal_updates_on_team_id"
+    t.index ["user_id"], name: "index_goal_updates_on_user_id"
   end
 
   create_table "goals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -264,6 +289,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_230110) do
   add_foreign_key "api_keys", "users"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "goal_collaborators", "goals"
+  add_foreign_key "goal_collaborators", "teams"
+  add_foreign_key "goal_collaborators", "users"
+  add_foreign_key "goal_updates", "goals"
+  add_foreign_key "goal_updates", "teams"
+  add_foreign_key "goal_updates", "users"
   add_foreign_key "goals", "teams"
   add_foreign_key "goals", "users"
   add_foreign_key "group_users", "groups"

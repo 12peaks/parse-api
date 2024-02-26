@@ -1,0 +1,2 @@
+module GoalCollaboratorsHelper
+end

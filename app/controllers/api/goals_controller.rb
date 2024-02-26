@@ -6,14 +6,22 @@ class Api::GoalsController < ApplicationController
   def index
     user = current_user || api_user
     goals = user.current_team.goals
-    render json: goals.as_json(include: { user: { only: [:id, :name], methods: [:avatar_image_url] } })
+    render json: goals.as_json(include: [
+      { user: { only: [:id, :name], methods: [:avatar_image_url] } },
+      { goal_updates: { only: [:id, :note, :value, :status, :created_at, :updated_at] } },
+      { goal_collaborators: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } } } }
+    ])
   end
 
   def show
     user = current_user || api_user
     goal = user.current_team.goals.find_by(id: params[:id])
     if goal
-      render json: goal.as_json(include: { user: { only: [:id, :name], methods: [:avatar_image_url] } })
+      render json: goal.as_json(include: [
+        { user: { only: [:id, :name], methods: [:avatar_image_url] } },
+        { goal_updates: { only: [:id, :note, :value, :status, :created_at, :updated_at] } },
+        { goal_collaborators: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } } } }
+      ])
     else
       render json: { error: "Goal not found in your current team" }, status: :not_found
     end
@@ -22,9 +30,15 @@ class Api::GoalsController < ApplicationController
   def create
     user = current_user || api_user
     goal = user.current_team.goals.new(goal_params)
+    goal.user = user
     if goal.save
-      render json: goal.as_json(include: { user: { only: [:id, :name], methods: [:avatar_image_url] } })
+      render json: goal.as_json(include: [
+        { user: { only: [:id, :name], methods: [:avatar_image_url] } },
+        { goal_updates: { only: [:id, :note, :value, :status, :created_at, :updated_at] } },
+        { goal_collaborators: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } } } }
+      ])
     else
+      puts goal.errors.full_messages
       render json: { error: goal.errors.full_messages }, status: :bad_request
     end
   end
@@ -34,7 +48,11 @@ class Api::GoalsController < ApplicationController
     goal = user.current_team.goals.find_by(id: params[:id])
     if goal
       if goal.update(goal_params)
-        render json: goal.as_json(include: { user: { only: [:id, :name], methods: [:avatar_image_url] } })
+        render json: goal.as_json(include: [
+          { user: { only: [:id, :name], methods: [:avatar_image_url] } },
+          { goal_updates: { only: [:id, :note, :value, :status, :created_at, :updated_at] } },
+          { goal_collaborators: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } } } }
+        ])
       else
         render json: { error: goal.errors.full_messages }, status: :bad_request
       end
@@ -57,6 +75,6 @@ class Api::GoalsController < ApplicationController
   private
 
   def goal_params
-    params.require(:goal).permit(:name, :description, :user, :team, :format, :start_date, :end_date, :initial_value, :target_value)
+    params.require(:goal).permit(:name, :description, :user, :team, :format, :start_date, :end_date, :initial_value, :target_value, goal_collaborators: [])
   end
 end

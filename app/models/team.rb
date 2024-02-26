@@ -5,4 +5,5 @@ class Team < ApplicationRecord
   has_many :triage_events
   has_many :polls
   has_many :goals
+  has_many :goal_collaborators
 end
