@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_26_023805) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_27_173104) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -123,6 +123,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_26_023805) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["team_id"], name: "index_groups_on_team_id"
+  end
+
+  create_table "mentions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "post_id", null: false
+    t.uuid "group_id"
+    t.uuid "comment_id"
+    t.uuid "mentioned_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comment_id"], name: "index_mentions_on_comment_id"
+    t.index ["group_id"], name: "index_mentions_on_group_id"
+    t.index ["post_id"], name: "index_mentions_on_post_id"
+    t.index ["user_id"], name: "index_mentions_on_user_id"
   end
 
   create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -300,6 +314,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_26_023805) do
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "groups", "teams"
+  add_foreign_key "mentions", "comments"
+  add_foreign_key "mentions", "groups"
+  add_foreign_key "mentions", "posts"
+  add_foreign_key "mentions", "users"
   add_foreign_key "notifications", "groups"
   add_foreign_key "notifications", "posts"
   add_foreign_key "notifications", "users"

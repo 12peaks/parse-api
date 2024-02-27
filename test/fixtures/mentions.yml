@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  post: one
+  group: one
+  comment: one
+  mentioned_user: 
+
+two:
+  user: two
+  post: two
+  group: two
+  comment: two
+  mentioned_user: 
