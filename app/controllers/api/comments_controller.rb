@@ -2,9 +2,8 @@ class Api::CommentsController < ApplicationController
   include ApiAuthentication
   before_action :authenticate_user!, unless: :api_request?
   skip_forgery_protection
-  
+
   def create
-    user = current_user || api_user
     comment = Comment.new(comment_params)
     comment.user = current_user || api_user
 
@@ -16,12 +15,10 @@ class Api::CommentsController < ApplicationController
       else
         render json: { error: comment.errors.full_messages }, status: :bad_request
       end
+    elsif comment.save
+      render json: comment
     else
-      if comment.save
-        render json: comment
-      else
-        render json: { error: comment.errors.full_messages }, status: :bad_request
-      end
+      render json: { error: comment.errors.full_messages }, status: :bad_request
     end
   end
 
@@ -37,7 +34,7 @@ class Api::CommentsController < ApplicationController
   def destroy
     comment = Comment.find(params[:id])
     comment.destroy
-    render json: { success: true, message: "Comment deleted" }
+    render json: { success: true, message: 'Comment deleted' }
   end
 
   private
