@@ -15,7 +15,6 @@ Devise.setup do |config|
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
   # config.secret_key = 'c2b233c9c5a6ddbb0a7cbf89e13fdefa805d2844054403076f283ac7aa156b1d1929ebb866370be942518b377af964106dbbb90f0f14b7e9632df71036fbe90f'
-  
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -273,12 +272,14 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-  config.omniauth :github, ENV["GITHUB_CLIENT_ID"], ENV["GITHUB_CLIENT_SECRET"], scope: "user:email"
+  config.omniauth :developer unless Rails.env.production?
 
-  config.omniauth :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_CLIENT_SECRET"], {
-    name: "google_oauth2",
+  config.omniauth :github, ENV['GITHUB_CLIENT_ID'], ENV['GITHUB_CLIENT_SECRET'], scope: 'user:email'
+
+  config.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'], {
+    name: 'google_oauth2',
     strategy_class: OmniAuth::Strategies::GoogleOauth2,
-    access_type: "offline",
+    access_type: 'offline'
   }
 
   # ==> Warden configuration

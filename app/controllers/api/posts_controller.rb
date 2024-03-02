@@ -5,22 +5,22 @@ class Api::PostsController < ApplicationController
 
   def index
     user = current_user || api_user
-    if params[:group_id]
-      posts = user.current_team.posts.where(group_id: params[:group_id]).order(created_at: :desc)
-    elsif params[:user_id]
-      posts = user.current_team.posts.where(user_id: params[:user_id]).order(created_at: :desc)
-    else
-      posts = user.current_team.posts.order(created_at: :desc)
-    end
+    posts = if params[:group_id]
+              user.current_team.posts.where(group_id: params[:group_id]).order(created_at: :desc)
+            elsif params[:user_id]
+              user.current_team.posts.where(user_id: params[:user_id]).order(created_at: :desc)
+            else
+              user.current_team.posts.order(created_at: :desc)
+            end
 
     render json: posts.as_json(include: {
-      user: { only: [:id, :name, :github_image], methods: [:avatar_image_url] },
-      group: { only: [:id, :name, :url_slug] },
-      comments: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } } },
-      reactions: { only: [:id, :post_id, :emoji_code, :emoji_text, :user_id] }
-    })
+                                 user: { only: %i[id name github_image], methods: [:avatar_image_url] },
+                                 group: { only: %i[id name url_slug] },
+                                 comments: { include: { user: { only: %i[id name], methods: [:avatar_image_url] } } },
+                                 reactions: { only: %i[id post_id emoji_code emoji_text user_id] }
+                               }), status: :ok
   end
-  
+
   def create
     user = current_user || api_user
     post = user.posts.new(post_params)
@@ -34,9 +34,12 @@ class Api::PostsController < ApplicationController
   def update
     user = current_user || api_user
     post = user.posts.find_by(id: params[:id])
-    
-    return render json: { error: "Post not found or not authorized" }, status: :not_found unless post && post.user_id == user.id
-    
+
+    unless post && post.user_id == user.id
+      return render json: { error: 'Post not found or not authorized' },
+                    status: :not_found
+    end
+
     if post.update(post_params)
       render json: post
     else
