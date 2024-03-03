@@ -38,12 +38,6 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
 
-  config.before(:each, type: :request) do
-    host! 'api.12peaks.com'
-  end
-
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
