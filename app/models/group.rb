@@ -9,7 +9,6 @@ class Group < ApplicationRecord
   has_many :polls
   has_many :mentions
 
-
   before_create :generate_url_slug
 
   def avatar_url
