@@ -2,7 +2,7 @@
 
 This is the API and authentication for the Parse application. It's built with Rails 7.1.3. The frontend is a Next.js application that uses session cookies to authenticate requests. In the future users will also be able to get API keys to access their data and build integrations. Users are authenticated via the Rails app and then redirected to the Next.js app.
 
-I'm currently in the process of rewriting the backend using Rails, the original app used Supabase for the backend logic, database, and auth. The application is currently in a broken state and is not ready for use. An overview of progress is shown below:
+I'm currently in the process of rewriting the backend using Rails, the original app used Supabase for the backend logic, database, and auth. The application is still a work in progress and is not ready for use. Contributions are welcome at this time, but please try to ensure they're relevant to getting the app to feature completeness. An overview of progress is shown below:
 
 - [x] Set up auth with OAuth (Google, GitHub, etc.)
 - [x] Wire up basic auth redirect to the Next.js frontend
@@ -11,14 +11,14 @@ I'm currently in the process of rewriting the backend using Rails, the original 
 - [x] Post resources and basic CRUD
 - [x] Comment resources and basic CRUD
 - [x] Group resources and basic CRUD
-- [ ] Reaction resources and basic CRUD
-- [ ] Notifications resources and basic CRUD
+- [x] Reaction resources and basic CRUD
+- [x] Notifications resources and basic CRUD
 - [ ] Catch up on model and controller tests
 - [ ] Group feed controller updates
 - [ ] Mailer setup
-- [ ] Invite system for teams
-- [ ] Triage resources and basic CRUD
-- [ ] Goals resources and basic CRUD
+- [x] Invite system for teams
+- [x] Triage resources and basic CRUD
+- [x] Goals resources and basic CRUD
 - [ ] Pagination for relevant resources (posts, comments, team members, etc.)
 - [ ] User settings + preferences endpoints
 

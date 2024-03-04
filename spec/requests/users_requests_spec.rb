@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Users API', type: :request do
+describe Api::UsersController, type: :request do
   let(:user) { create(:user, :from_omniauth) }
   let(:team) { create(:team) }
   let(:headers) { { 'ACCEPT' => 'application/json' } }

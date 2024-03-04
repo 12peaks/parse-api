@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Api::GroupsController', type: :request do
+RSpec.describe Api::GroupsController, type: :request do
   let(:user) { create(:user, :from_omniauth) }
   let(:team) { create(:team) }
   let!(:user_team) do
