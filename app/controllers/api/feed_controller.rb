@@ -9,18 +9,22 @@ class Api::FeedController < ApplicationController
     combined_feed.sort_by!(&:created_at).reverse!
     feed_items = combined_feed.map do |item|
       if item.is_a?(Poll)
-        item_hash = item.as_json(include: { poll_options: { include: { poll_votes: { include: { user: { only: [:id], methods: [:avatar_image_url] } } } } }, user: { only: [:id, :name], methods: [:avatar_image_url] } })
+        item_hash = item.as_json(include: {
+                                   poll_options: { include: { poll_votes: { include: { user: { only: [:id],
+                                                                                               methods: [:avatar_image_url] } } } } }, user: { only: %i[id name], methods: [:avatar_image_url] }
+                                 })
         item_hash.merge!({ type: 'poll' })
       elsif item.is_a?(Post)
         item_hash = item.as_json(include: {
-          user: { only: [:id, :name, :github_image], methods: [:avatar_image_url] },
-          group: { only: [:id, :name, :url_slug] },
-          comments: { include: { user: { only: [:id, :name], methods: [:avatar_image_url] } } },
-          reactions: { only: [:id, :post_id, :emoji_code, :emoji_text, :user_id] }
-        })
+                                   user: { only: %i[id name github_image], methods: [:avatar_image_url] },
+                                   group: { only: %i[id name url_slug] },
+                                   comments: { include: { user: { only: %i[id name], methods: [:avatar_image_url] } } },
+                                   reactions: { only: %i[id post_id emoji_code emoji_text user_id] }
+                                 })
         item_hash.merge!({ type: 'post' })
       end
     end
     render json: feed_items
   end
 end
+
