@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    email { 'testuser@test.com' }
+    email { Faker::Internet.email }
     name { 'Test User' }
     password { 'password' }
     trait :from_omniauth do
@@ -10,6 +10,9 @@ FactoryBot.define do
       after(:build) do |user, _evaluator|
         user.skip_confirmation!
       end
+    end
+    after(:build) do |user, _evaluator|
+      user.skip_confirmation!
     end
   end
 end
