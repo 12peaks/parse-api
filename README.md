@@ -13,13 +13,13 @@ I'm currently in the process of rewriting the backend using Rails, the original 
 - [x] Group resources and basic CRUD
 - [x] Reaction resources and basic CRUD
 - [x] Notifications resources and basic CRUD
-- [ ] Catch up on model and controller tests
-- [ ] Group feed controller updates
+- [ ] Catch up on model and controller tests - WIP
+- [x] Group feed controller updates
 - [ ] Mailer setup
 - [x] Invite system for teams
 - [x] Triage resources and basic CRUD
 - [x] Goals resources and basic CRUD
-- [ ] Pagination for relevant resources (posts, comments, team members, etc.)
+- [ ] Add pagination for feeds
 - [ ] User settings + preferences endpoints
 
 ## Getting Started
