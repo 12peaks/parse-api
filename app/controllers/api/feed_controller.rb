@@ -7,9 +7,9 @@ class Api::FeedController < ApplicationController
     user = current_user || api_user
 
     polls = filter_items(user.current_team.polls, params[:group_id],
-                         params[:user_id]).order(created_at: :desc).limit(20)
+                         params[:user_id]).order(created_at: :desc)
     posts = filter_items(user.current_team.posts, params[:group_id],
-                         params[:user_id]).order(created_at: :desc).limit(20)
+                         params[:user_id]).order(created_at: :desc)
 
     combined_feed = (polls + posts).sort_by(&:created_at).reverse!
     feed_items = combined_feed.map do |item|
